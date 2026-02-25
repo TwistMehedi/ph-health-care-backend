@@ -6,8 +6,8 @@ async function main() {
   try {
     await prisma.$connect();
 
-    app.listen(env.port, () => {
-      console.log(`Server running on http://localhost:${env.port}`);
+    app.listen(env.PORT, () => {
+      console.log(`Server running on http://localhost:${env.PORT}`);
     });
     console.log("Database connection successfully");
   } catch (e) {

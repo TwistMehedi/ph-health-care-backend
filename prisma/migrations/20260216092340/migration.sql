@@ -1,0 +1,10 @@
+-- CreateEnum
+CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'BLOCKED', 'SUSPEND');
+
+-- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('SUPER_ADMIN', 'ADMIN', 'PATIENT');
+
+-- AlterTable
+ALTER TABLE "user" ADD COLUMN     "needPasswordChange" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "role" TEXT NOT NULL DEFAULT 'PATIENT',
+ADD COLUMN     "status" TEXT NOT NULL DEFAULT 'ACTIVE';
