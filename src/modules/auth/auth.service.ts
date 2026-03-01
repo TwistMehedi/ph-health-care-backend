@@ -1,3 +1,8 @@
+import {
+  accessToken,
+  // betterAuthToken,
+  getRefreshToken,
+} from "../../helper/token";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
 
@@ -27,7 +32,33 @@ export const registerPatientService = async (payload: IUser) => {
     //     await prisma
     // })
 
-    return data;
+    const token = accessToken({
+      userId: data.user.id,
+      email: data.user.email,
+      name: data.user.name,
+      role: data.user.role,
+    });
+
+    const refreshToken = getRefreshToken({
+      userId: data.user.id,
+      email: data.user.email,
+      name: data.user.name,
+      role: data.user.role,
+    });
+
+    // const betterAuth = betterAuthToken({
+    //   userId: data.user.id,
+    //   email: data.user.email,
+    //   name: data.user.name,
+    //   role: data.user.role,
+    // });
+
+    return {
+      ...data,
+      accessToken: token,
+      refreshToken,
+      // betterAuth,
+    };
   } catch (error) {
     console.error("User register error:", error);
   }
@@ -49,7 +80,21 @@ export const patientLoginService = async ({
       },
     });
 
-    return data;
+    const token = accessToken({
+      userId: data.user.id,
+      email: data.user.email,
+      name: data.user.name,
+      role: data.user.role,
+    });
+
+    const refreshToken = getRefreshToken({
+      userId: data.user.id,
+      email: data.user.email,
+      name: data.user.name,
+      role: data.user.role,
+    });
+
+    return { ...data, accessToken: token, refreshToken };
   } catch (error) {
     console.error("User login error:", error);
   }

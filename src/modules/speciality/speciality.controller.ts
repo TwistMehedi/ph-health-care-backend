@@ -7,6 +7,8 @@ const specialitiController = {
   createSpecialiti: TryCatch(async (req, res, next) => {
     const { title, experiance } = req.body;
 
+    console.log(req.body);
+
     if (!title || !experiance) {
       const missing = !title ? "title" : "experiance";
       return next(new ErrorHandler(`${missing} is required`, 400));
