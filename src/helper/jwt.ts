@@ -27,25 +27,21 @@ export const decodedToken = (token: string) => {
   }
 };
 
-export const sendResponse = (
-  res: any,
-  { session, accessToken, refreshTokenn }: any,
-  message: string,
-) => {
+export const sendResponse = (res: any, result: any, message: string) => {
   res
-    .cookie("better-auth.session_token", session.token, {
+    .cookie("better-auth.session_token", result?.token, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
     })
-    .cookie("refreshToken", refreshTokenn, {
+    .cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     })
-    .cookie("accessToken", accessToken, {
+    .cookie("accessToken", result.accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
@@ -55,10 +51,6 @@ export const sendResponse = (
     .json({
       success: true,
       message,
-      data: {
-        session,
-        accessToken,
-        refreshTokenn,
-      },
+      data: result,
     });
 };

@@ -14,6 +14,10 @@ interface IEnvConfig {
   SESSION_TOKEN_EXPIRES_IN: string;
   SESSION_TOKEN_UPDATE_INTERVAL: string;
   BETTER_AUTH_SECRET: string;
+  SMTP_HOST: string;
+  SMTP_PORT: string;
+  SMTP_USER_NAME: string;
+  SMTP_PASSWORD: string;
 }
 
 const envArray = [
@@ -26,6 +30,10 @@ const envArray = [
   "SESSION_TOKEN_EXPIRES_IN",
   "SESSION_TOKEN_UPDATE_INTERVAL",
   "BETTER_AUTH_SECRET",
+  "SMTP_HOST",
+  "SMTP_PORT",
+  "SMTP_USER_NAME",
+  "SMTP_PASSWORD",
 ] as const;
 
 envArray.forEach((key) => {
@@ -46,6 +54,10 @@ const envConfig = (): IEnvConfig => {
     SESSION_TOKEN_UPDATE_INTERVAL: process.env
       .SESSION_TOKEN_UPDATE_INTERVAL as string,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET as string,
+    SMTP_HOST: process.env.SMTP_HOST as string,
+    SMTP_PORT: process.env.SMTP_PORT as string,
+    SMTP_USER_NAME: process.env.SMTP_USER_NAME as string,
+    SMTP_PASSWORD: process.env.SMTP_PASSWORD as string,
   };
 };
 

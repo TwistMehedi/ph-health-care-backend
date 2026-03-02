@@ -1,6 +1,12 @@
+import { read } from "node:fs";
+import { sendResponse } from "../../helper/jwt";
 import { ErrorHandler } from "../../utils/ErrorHandler";
 import TryCatch from "../../utils/TryCatch";
-import { patientLoginService, registerPatientService } from "./auth.service";
+import {
+  patientLoginService,
+  registerPatientService,
+  verifyOtpService,
+} from "./auth.service";
 
 export const registerPatient = TryCatch(async (req, res, next) => {
   const payload = req.body;
@@ -11,75 +17,30 @@ export const registerPatient = TryCatch(async (req, res, next) => {
     return next(new ErrorHandler("Registration fails", 400));
   }
 
-  const { accessToken, refreshToken, ...register } = result;
-
-  res
-    .cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000,
-    })
-    .cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    })
-    .cookie("better-auth.session_token", register.token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000,
-    })
-    .status(201)
-    .json({
-      success: true,
-      message: "User created successfully",
-      data: register,
-    });
+  res.status(201).json({
+    success: true,
+    message: "User created successfully",
+    data: result,
+  });
 });
 
 export const loginPatient = TryCatch(async (req, res, next) => {
   const payload = req.body;
-  // console.log(payload);
   const result = await patientLoginService(payload);
 
-  // console.log(result);
   if (!result) {
     return next(new ErrorHandler("Login in fail", 400));
   }
 
-  const { accessToken, refreshToken, ...login } = result;
+  sendResponse(res, result, "User login successfully");
+});
 
-  res
-    .cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000,
-    })
-    .cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    })
-    .cookie("better-auth.session_token", login.token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000,
-    })
-    .status(201)
-    .json({
-      success: true,
-      message: "User login successfully",
-      data: {
-        accessToken,
-        refreshToken,
-        token: login.token,
-        login,
-      },
-    });
+export const verifyOtp = TryCatch(async (req, res, next) => {
+  const payload = req.body;
+  const result = await verifyOtpService(payload);
+  if (!result) {
+    return next(new ErrorHandler("OTP verification failed", 400));
+  }
+
+  sendResponse(res, result, "OTP verified successfully");
 });

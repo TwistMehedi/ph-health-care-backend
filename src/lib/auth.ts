@@ -2,7 +2,8 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import { UserRole, UserStatus } from "./../generated/prisma/enums";
-import { bearer } from "better-auth/plugins";
+import { bearer, emailOTP } from "better-auth/plugins";
+import { sendMail } from "../utils/email";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -11,9 +12,25 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification: true,
   },
 
-  plugins: [bearer()],
+  plugins: [
+    bearer(),
+    emailOTP({
+      otpLength: 6,
+      expiresIn: 60 * 30,
+      async sendVerificationOTP({ email, otp, type }) {
+        if (type === "email-verification") {
+          await sendMail(
+            email,
+            "Verify Your OTP",
+            `Your verification OTP is: ${otp}\n\nThis OTP will expire soon.`,
+          );
+        }
+      },
+    }),
+  ],
 
   user: {
     additionalFields: {

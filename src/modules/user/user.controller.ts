@@ -11,7 +11,6 @@ import { sendResponse } from "../../helper/jwt";
 export const doctorCreate = TryCatch(async (req, res, next) => {
   const payload = req.body;
 
-  console.log("Payload:", payload);
   const create = await createDoctorService(payload);
   if (!create) {
     next(new ErrorHandler("Doctor created problem", 400));
