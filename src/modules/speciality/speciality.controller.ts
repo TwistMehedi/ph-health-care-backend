@@ -7,16 +7,22 @@ const specialitiController = {
   createSpecialiti: TryCatch(async (req, res, next) => {
     const { title, experiance } = req.body;
 
-    console.log(req.body);
+    const image = req.file?.path;
+    // const image = req.file;
+
+    if (!image) {
+      return next(new ErrorHandler("Image is required", 400));
+    }
 
     if (!title || !experiance) {
       const missing = !title ? "title" : "experiance";
       return next(new ErrorHandler(`${missing} is required`, 400));
     }
 
-    const speciality = await specialityService.createSpecialitiService(
-      req.body,
-    );
+    const speciality = await specialityService.createSpecialitiService({
+      ...req.body,
+      icon: image,
+    });
 
     if (!speciality) {
       return next(new ErrorHandler("Failed to create Speciality", 500));

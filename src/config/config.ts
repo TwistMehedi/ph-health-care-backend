@@ -18,6 +18,9 @@ interface IEnvConfig {
   SMTP_PORT: string;
   SMTP_USER_NAME: string;
   SMTP_PASSWORD: string;
+  CLOUDINARY_CLOUD_NAME: string;
+  CLOUDINARY_API_KEY: string;
+  CLOUDINARY_API_SECRET: string;
 }
 
 const envArray = [
@@ -34,6 +37,9 @@ const envArray = [
   "SMTP_PORT",
   "SMTP_USER_NAME",
   "SMTP_PASSWORD",
+  "CLOUDINARY_CLOUD_NAME",
+  "CLOUDINARY_API_KEY",
+  "CLOUDINARY_API_SECRET",
 ] as const;
 
 envArray.forEach((key) => {
@@ -58,6 +64,9 @@ const envConfig = (): IEnvConfig => {
     SMTP_PORT: process.env.SMTP_PORT as string,
     SMTP_USER_NAME: process.env.SMTP_USER_NAME as string,
     SMTP_PASSWORD: process.env.SMTP_PASSWORD as string,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string,
   };
 };
 
